@@ -1,0 +1,99 @@
+version: '3.4'
+
+x-common-variables: &common-variables
+  DATASOURCE_PORT: ${DB_PORT}
+  DATASOURCE_USER: ${DB_USER}
+  DATASOURCE_PASSWORD: ${DB_PASSWORD}
+
+services:
+  usermysqldb:
+    container_name: usermysqldb
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=${UM_DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    volumes:
+      - user_storage:/var/lib/mysql
+
+  eventmysqldb:
+    container_name: eventmysqldb
+    image: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=${EM_DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    volumes:
+      - event_storage:/var/lib/mysql
+
+  reservmysqldb:
+    container_name: reservmysqldb
+    image: mysql
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_DATABASE=${RM_DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    volumes:
+      - reserv_storage:/var/lib/mysql
+
+  usermanager:
+    container_name: usermanager
+    image: callegra/userimage
+    build:
+      context: .
+      dockerfile: MicroServizi/UserManager/Dockerfile
+    depends_on:
+      - usermysqldb
+    ports:
+      - "4444:8080"
+    restart: always
+    environment:
+      <<: *common-variables
+      UM_DATASOURCE_HOST: ${UM_DB_HOST}
+      UM_DATASOURCE_NAME: ${UM_DB_NAME}
+
+  eventmanager:
+    container_name: eventmanager
+    image: callegra/eventimage
+    build:
+      context: .
+      dockerfile: MicroServizi/EventManager/Dockerfile
+    depends_on:
+      - eventmysqldb
+    ports:
+      - "5555:8080"
+    restart: always
+    environment:
+      <<: *common-variables
+      EM_DATASOURCE_HOST: ${EM_DB_HOST}
+      EM_DATASOURCE_NAME: ${EM_DB_NAME}
+
+  reservmanager:
+    container_name: reservmanager
+    image: callegra/reservimage
+    build:
+      context: .
+      dockerfile: MicroServizi/ReservManager/Dockerfile
+    depends_on:
+      - reservmysqldb
+    ports:
+      - "7777:8080"
+    restart: always
+    environment:
+      <<: *common-variables
+      RM_DATASOURCE_HOST: ${RM_DB_HOST}
+      RM_DATASOURCE_NAME: ${RM_DB_NAME}
+
+volumes:
+  user_storage:
+  event_storage:
+  reserv_storage:

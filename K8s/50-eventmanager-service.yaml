@@ -1,0 +1,14 @@
+apiVersion : v1
+kind: Service
+metadata:
+  name: eventsapp-eventmanager-service
+  labels:
+    svc: eventsapp-eventmanager
+spec:
+  selector:
+    app: eventsapp-eventmanager-pods
+  #type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 5555
+      targetPort: 8080

@@ -1,0 +1,14 @@
+apiVersion : v1
+kind: Service
+metadata:
+  name: eventsapp-reservmanager-service
+  labels:
+    svc: eventsapp-reservmanager
+spec:
+  selector:
+    app: eventsapp-reservmanager-pods
+  #type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 7777
+      targetPort: 8080

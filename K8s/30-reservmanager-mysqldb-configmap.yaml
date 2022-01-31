@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  RM_DATASOURCE_HOST: "eventsapp-reservmysqldb-service"
+  DATASOURCE_PORT: "3306"
+  RM_DATASOURCE_NAME: "ReservDB"
+  DATASOURCE_USER: "eventsapp"
+  DATASOURCE_PASSWORD: "eventsapp"
+metadata:
+  name: reservmanager-reservmysqldb-env-file

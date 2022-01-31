@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventsapp-reservmanager-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventsapp-reservmanager-pods
+  template:
+    metadata:
+      labels:
+        app: eventsapp-reservmanager-pods
+    spec:
+      containers:
+        - name: reservmanager
+          image: callegra/reservimage
+          ports:
+            - containerPort: 7777
+          envFrom:
+            - configMapRef:
+                name: reservmanager-reservmysqldb-env-file
+            - secretRef:
+                name: reservmanager-reservmysqldb-secret-file

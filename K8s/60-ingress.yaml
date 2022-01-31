@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eventsapp-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Content-Type"
+spec:
+  rules:
+    - host: eventsapp.dev.loc
+      http:
+        paths:
+          - pathType: ImplementationSpecific
+            path: /usersapi
+            backend:
+              service:
+                name: eventsapp-usermanager-service
+                port:
+                  number: 4444
+          - pathType: ImplementationSpecific
+            path: /eventsapi
+            backend:
+              service:
+                name: eventsapp-eventmanager-service
+                port:
+                  number: 5555
+          - pathType: ImplementationSpecific
+            path: /reservsapi
+            backend:
+              service:
+                name: eventsapp-reservmanager-service
+                port:
+                  number: 7777

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventsapp-usermanager-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventsapp-usermanager-pods
+  template:
+    metadata:
+      labels:
+        app: eventsapp-usermanager-pods
+    spec:
+      containers:
+        - name: usermanager
+          image: callegra/userimage
+          ports:
+            - containerPort: 4444
+          envFrom:
+            - configMapRef:
+                name: usermanager-usermysqldb-env-file
+            - secretRef:
+                name: usermanager-usermysqldb-secret-file

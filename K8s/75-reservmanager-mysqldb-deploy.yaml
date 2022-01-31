@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventsapp-reservmysqldb-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventsapp-reservmysqldb-pods
+  template:
+    metadata:
+      labels:
+        app: eventsapp-reservmysqldb-pods
+    spec:
+      containers:
+        - name: reservmysqldb
+          image: mysql
+          ports:
+            - containerPort: 3308
+          envFrom:
+            - secretRef:
+                name: reservmanager-reservmysqldb-secret-file
+          volumeMounts:
+            - mountPath: /data/db
+              name: reservservice-db-volume
+      volumes:
+        - name: reservservice-db-volume
+          hostPath:
+            path: /reservservice-db-volume
+            type: DirectoryOrCreate

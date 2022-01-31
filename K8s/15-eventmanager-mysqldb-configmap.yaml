@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  EM_DATASOURCE_HOST: "eventsapp-eventmysqldb-service"
+  DATASOURCE_PORT: "3306"
+  EM_DATASOURCE_NAME: "EventDB"
+  DATASOURCE_USER: "eventsapp"
+  DATASOURCE_PASSWORD: "eventsapp"
+metadata:
+  name: eventmanager-eventmysqldb-env-file

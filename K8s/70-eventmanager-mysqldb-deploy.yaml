@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventsapp-eventmysqldb-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventsapp-eventmysqldb-pods
+  template:
+    metadata:
+      labels:
+        app: eventsapp-eventmysqldb-pods
+    spec:
+      containers:
+        - name: eventmysqldb
+          image: mysql
+          ports:
+            - containerPort: 3307
+          envFrom:
+            - secretRef:
+                name: eventmanager-eventmysqldb-secret-file
+          volumeMounts:
+            - mountPath: /data/db
+              name: eventservice-db-volume
+      volumes:
+        - name: eventservice-db-volume
+          hostPath:
+            path: /eventservice-db-volume
+            type: DirectoryOrCreate

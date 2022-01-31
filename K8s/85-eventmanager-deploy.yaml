@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventsapp-eventmanager-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventsapp-eventmanager-pods
+  template:
+    metadata:
+      labels:
+        app: eventsapp-eventmanager-pods
+    spec:
+      containers:
+        - name: eventmanager
+          image: callegra/eventimage
+          ports:
+            - containerPort: 5555
+          envFrom:
+            - configMapRef:
+                name: eventmanager-eventmysqldb-env-file
+            - secretRef:
+                name: eventmanager-eventmysqldb-secret-file

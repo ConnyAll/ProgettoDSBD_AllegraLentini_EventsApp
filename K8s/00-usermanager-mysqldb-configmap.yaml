@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  UM_DATASOURCE_HOST: "eventsapp-usermysqldb-service"
+  DATASOURCE_PORT: "3306"
+  UM_DATASOURCE_NAME: "UserDB"
+  DATASOURCE_USER: "eventsapp"
+  DATASOURCE_PASSWORD: "eventsapp"
+metadata:
+  name: usermanager-usermysqldb-env-file

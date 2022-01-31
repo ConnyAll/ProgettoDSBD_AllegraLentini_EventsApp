@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventsapp-usermysqldb-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventsapp-usermysqldb-pods
+  template:
+    metadata:
+      labels:
+        app: eventsapp-usermysqldb-pods
+    spec:
+      containers:
+        - name: usermysqldb
+          image: mysql
+          ports:
+            - containerPort: 3306
+          envFrom:
+            - secretRef:
+                name: usermanager-usermysqldb-secret-file
+          volumeMounts:
+            - mountPath: /data/db
+              name: userservice-db-volume
+      volumes:
+        - name: userservice-db-volume
+          hostPath:
+            path: /userservice-db-volume
+            type: DirectoryOrCreate
